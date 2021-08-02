@@ -635,6 +635,8 @@ public class ReactVideoView extends ScalableVideoView implements
 
     @Override
     public void seekTo(int msec) {
+        setSrc(mSrcUriString, mSrcType, mSrcIsNetwork, mSrcIsAsset, mRequestHeaders);
+        
         if (mMediaPlayerValid) {
             mSeekTime = msec;
             super.seekTo(msec);

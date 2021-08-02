@@ -985,44 +985,46 @@ static int const RCTVideoUnset = -1;
 
 - (void)setSeek:(NSDictionary *)info
 {
-  NSNumber *seekTime = info[@"time"];
-  NSNumber *seekTolerance = info[@"tolerance"];
+  [self setSrc:_source];
   
-  int timeScale = 1000;
+  // NSNumber *seekTime = info[@"time"];
+  // NSNumber *seekTolerance = info[@"tolerance"];
   
-  AVPlayerItem *item = _player.currentItem;
-  if (item && item.status == AVPlayerItemStatusReadyToPlay) {
-    // TODO check loadedTimeRanges
+  // int timeScale = 1000;
+  
+  // AVPlayerItem *item = _player.currentItem;
+  // if (item && item.status == AVPlayerItemStatusReadyToPlay) {
+  //   // TODO check loadedTimeRanges
     
-    CMTime cmSeekTime = CMTimeMakeWithSeconds([seekTime floatValue], timeScale);
-    CMTime current = item.currentTime;
-    // TODO figure out a good tolerance level
-    CMTime tolerance = CMTimeMake([seekTolerance floatValue], timeScale);
-    BOOL wasPaused = _paused;
+  //   CMTime cmSeekTime = CMTimeMakeWithSeconds([seekTime floatValue], timeScale);
+  //   CMTime current = item.currentTime;
+  //   // TODO figure out a good tolerance level
+  //   CMTime tolerance = CMTimeMake([seekTolerance floatValue], timeScale);
+  //   BOOL wasPaused = _paused;
     
-    if (CMTimeCompare(current, cmSeekTime) != 0) {
-      if (!wasPaused) [_player pause];
-      [_player seekToTime:cmSeekTime toleranceBefore:tolerance toleranceAfter:tolerance completionHandler:^(BOOL finished) {
-        if (!_timeObserver) {
-          [self addPlayerTimeObserver];
-        }
-        if (!wasPaused) {
-          [self setPaused:false];
-        }
-        if(self.onVideoSeek) {
-          self.onVideoSeek(@{@"currentTime": [NSNumber numberWithFloat:CMTimeGetSeconds(item.currentTime)],
-                             @"seekTime": seekTime,
-                             @"target": self.reactTag});
-        }
-      }];
+  //   if (CMTimeCompare(current, cmSeekTime) != 0) {
+  //     if (!wasPaused) [_player pause];
+  //     [_player seekToTime:cmSeekTime toleranceBefore:tolerance toleranceAfter:tolerance completionHandler:^(BOOL finished) {
+  //       if (!_timeObserver) {
+  //         [self addPlayerTimeObserver];
+  //       }
+  //       if (!wasPaused) {
+  //         [self setPaused:false];
+  //       }
+  //       if(self.onVideoSeek) {
+  //         self.onVideoSeek(@{@"currentTime": [NSNumber numberWithFloat:CMTimeGetSeconds(item.currentTime)],
+  //                            @"seekTime": seekTime,
+  //                            @"target": self.reactTag});
+  //       }
+  //     }];
       
-      _pendingSeek = false;
-    }
+  //     _pendingSeek = false;
+  //   }
     
-  } else {
-    _pendingSeek = true;
-    _pendingSeekTime = [seekTime floatValue];
-  }
+  // } else {
+  //   _pendingSeek = true;
+  //   _pendingSeekTime = [seekTime floatValue];
+  // }
 }
 
 - (void)setRate:(float)rate
